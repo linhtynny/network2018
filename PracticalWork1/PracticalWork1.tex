@@ -15,21 +15,78 @@
 \begin{itemize}
     \item Check if usth.edu.vn is up or not with ping (5 times only)
     
-\includegraphics[width=\linewidth]{ping}
+% \includegraphics[width=\linewidth]{ping}
+\begin{verbatim}
+Linhs-MacBook-Pro:network2018 linhtynny$ ping usth.edu.vn
+PING usth.edu.vn (104.27.160.15): 56 data bytes
+64 bytes from 104.27.160.15: icmp_seq=0 ttl=54 time=24.501 ms
+64 bytes from 104.27.160.15: icmp_seq=1 ttl=54 time=28.594 ms
+64 bytes from 104.27.160.15: icmp_seq=2 ttl=54 time=34.340 ms
+64 bytes from 104.27.160.15: icmp_seq=3 ttl=54 time=35.722 ms
+64 bytes from 104.27.160.15: icmp_seq=4 ttl=54 time=48.664 ms
+64 bytes from 104.27.160.15: icmp_seq=5 ttl=54 time=33.391 ms
+^C
+--- usth.edu.vn ping statistics ---
+6 packets transmitted, 6 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 24.501/34.202/48.664/7.502 ms
+\end{verbatim}
 
 \bigskip
 
 
  \item Use traceroute tool to find the route from VPS to usth.edu.vn
  
-\includegraphics[width=\linewidth]{VPStraceroute}
+% \includegraphics[width=\linewidth]{VPStraceroute}linhdown@frontend:~$ traceroute usth.edu.vn
+\begin{verbatim}
+traceroute to usth.edu.vn (104.27.161.15), 30 hops max, 60 byte packets
+ 1  192.168.0.1 (192.168.0.1)  0.907 ms  0.899 ms  0.888 ms
+ 2  ci96.120-46.netnam.vn (101.96.120.46)  2.136 ms  2.137 ms  2.126 ms
+ 3  static.netnam.vn (119.17.219.78)  2.449 ms static.netnam.vn (119.17.219.74)  2.472 ms  2.527 ms
+ 4  static.netnam.vn (119.17.219.13)  2.422 ms  2.413 ms static.netnam.vn (119.17.219.17)  2.403 ms
+ 5  static.netnam.vn (119.17.219.10)  2.416 ms static.netnam.vn (119.17.219.14)  2.788 ms 203.113.156.25 (203.113.156.25)  2.793 ms
+ 6  static.netnam.vn (119.17.219.17)  2.409 ms localhost (27.68.229.9)  71.159 ms localhost (27.68.229.49)  52.715 ms
+ 7  localhost (27.68.240.94)  35.435 ms localhost (27.68.240.54)  73.691 ms 203.113.156.25 (203.113.156.25)  2.197 ms
+ 8  localhost (27.68.229.49)  35.725 ms localhost (27.68.229.9)  38.962 ms  37.742 ms
+ 9  104.27.161.15 (104.27.161.15)  26.222 ms  23.185 ms localhost (27.68.240.62)  69.241 ms
+
+linhdown@frontend:~$ traceroute usth.edu.vn
+traceroute to usth.edu.vn (104.27.161.15), 30 hops max, 60 byte packets
+ 1  192.168.0.1 (192.168.0.1)  0.907 ms  0.899 ms  0.888 ms
+ 2  ci96.120-46.netnam.vn (101.96.120.46)  2.136 ms  2.137 ms  2.126 ms
+ 3  static.netnam.vn (119.17.219.78)  2.449 ms static.netnam.vn (119.17.219.74)  2.472 ms  2.527 ms
+ 4  static.netnam.vn (119.17.219.13)  2.422 ms  2.413 ms static.netnam.vn (119.17.219.17)  2.403 ms
+ 5  static.netnam.vn (119.17.219.10)  2.416 ms static.netnam.vn (119.17.219.14)  2.788 ms 203.113.156.25 (203.113.156.25)  2.793 ms
+ 6  static.netnam.vn (119.17.219.17)  2.409 ms localhost (27.68.229.9)  71.159 ms localhost (27.68.229.49)  52.715 ms
+ 7  localhost (27.68.240.94)  35.435 ms localhost (27.68.240.54)  73.691 ms 203.113.156.25 (203.113.156.25)  2.197 ms
+ 8  localhost (27.68.229.49)  35.725 ms localhost (27.68.229.9)  38.962 ms  37.742 ms
+ 9  104.27.161.15 (104.27.161.15)  26.222 ms  23.185 ms localhost (27.68.240.62)  69.241 ms
+\end{verbatim}
 
 \bigskip
 
 
  \item Use traceroute tool to find the route from laptop to usth.edu.vn
  
-\includegraphics[width=\linewidth]{traceroute}
+% \includegraphics[width=\linewidth]{traceroute}
+\begin{verbatim}
+Linhs-MacBook-Pro:network2018 linhtynny$ traceroute usth.edu.vn
+traceroute: Warning: usth.edu.vn has multiple addresses; using 104.27.160.15
+traceroute to usth.edu.vn (104.27.160.15), 64 hops max, 52 byte packets
+ 1  192.168.10.10 (192.168.10.10)  3.641 ms  5.830 ms  2.002 ms
+ 2  ci96.120-46.netnam.vn (101.96.120.46)  1.780 ms  2.679 ms  2.448 ms
+ 3  static.netnam.vn (119.17.219.78)  3.574 ms
+    static.netnam.vn (119.17.219.74)  2.021 ms  2.858 ms
+ 4  static.netnam.vn (119.17.219.17)  1.820 ms
+    static.netnam.vn (119.17.219.13)  2.103 ms  1.763 ms
+ 5  203.113.156.25 (203.113.156.25)  6.639 ms  19.716 ms
+    static.netnam.vn (119.17.219.10)  13.144 ms
+ 6  static.netnam.vn (119.17.219.21)  12.000 ms *  232.843 ms
+ 7  localhost (27.68.240.54)  204.041 ms
+    localhost (27.68.240.250)  311.341 ms *
+ 8  13335.hkg.equinix.com (119.27.63.48)  41.231 ms *  40.949 ms
+ 9  * 104.27.160.15 (104.27.160.15)  30.550 ms
+    localhost (27.68.240.54)  70.456 ms
+\end{verbatim}
 
 \end{itemize}
 \end{document}
