@@ -9,7 +9,7 @@ int main(){
 int sockfd, clen, clientfd;
 struct sockaddr_in saddr, caddr;
 unsigned short port = 8784;
-
+char buffer[100] = "testing ";
 
 if ((sockfd=socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 	printf("Error creating socket \n");
@@ -46,6 +46,8 @@ if ((clientfd = accept(sockfd, (struct sockaddr *)&caddr, (socklen_t *)&clen)) <
 }
 else{
 	printf("Accept!\n");
+	send(clientfd, buffer, strlen(buffer), 0);
+	close(clientfd);
 }
 }
 return 0;
