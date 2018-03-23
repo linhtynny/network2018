@@ -1,6 +1,7 @@
-#include<stdio.h>
-#include<netdb.h>
-#include<arpa/inet.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <string.h>
 #include <unistd.h> 
@@ -40,11 +41,22 @@ if (connect(sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
 else{
 	printf("Connect!\n");// read(sockfd, buffer, sizeof(buffer));
 	while(cont == 1){
-		
+		// free(buffer);
 		printf("%s\n", "Client:");
-		scanf("%s", buffer);
+		// scanf("%s", buffer);
+		int i = 0;
+		while (1) {
+		    scanf("%c", &buffer[i]);
+		    if (buffer[i] == '\n') {
+		      break;
+		    }
+		    else {
+		      i++;
+		    }
+		  }
 		send(sockfd, buffer, sizeof(buffer), 0);
 		recv(sockfd, buffer, sizeof(buffer), 0);
+		printf("%s\n", "Server:");
 		printf("%s\n", buffer);
 		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
 		// scanf("%d", cont);

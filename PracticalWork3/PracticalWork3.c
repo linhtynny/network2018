@@ -1,8 +1,9 @@
-#include<stdio.h>
-#include<netdb.h>
-#include<arpa/inet.h>
-#include<string.h>
-#include<unistd.h> 
+#include <stdio.h>
+#include <stdlib.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <string.h>
+#include <unistd.h> 
 
 int main(){
 
@@ -50,9 +51,21 @@ else{
 	while(cont == 1){
 		
 		recv(clientfd, buffer, sizeof(buffer), 0);
+		printf("%s\n", "Client:");
 		printf("%s\n", buffer);
 		printf("%s\n", "Server:");
-		scanf("%s", buffer);
+		// scanf("%s", buffer);
+		// free(buffer);
+		int i = 0;
+		while (1) {
+		    scanf("%c", &buffer[i]);
+		    if (buffer[i] == '\n') {
+		      break;
+		    }
+		    else {
+		      i++;
+		    }
+		  }
 		send(clientfd, buffer, sizeof(buffer), 0);
 		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
 		// scanf("%d", &cont);
