@@ -1,8 +1,8 @@
 #include<stdio.h>
 #include<netdb.h>
 #include<arpa/inet.h>
-#include <string.h>
-#include <unistd.h> 
+#include<string.h>
+#include<unistd.h> 
 
 int main(){
 
@@ -10,6 +10,7 @@ int sockfd, clen, clientfd;
 struct sockaddr_in saddr, caddr;
 unsigned short port = 8784;
 char buffer[100] = "testing ";
+int cont = 1;
 
 if ((sockfd=socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 	printf("Error creating socket \n");
@@ -39,16 +40,25 @@ else{
 
 clen=sizeof(caddr);
 
-while(1){
+
 if ((clientfd = accept(sockfd, (struct sockaddr *)&caddr, (socklen_t *)&clen)) < 0)
 {
 	printf("Error accepting connection \n ");
 }
 else{
 	printf("Accept!\n");
-	send(clientfd, buffer, strlen(buffer), 0);
+	while(cont == 1){
+		
+		recv(clientfd, buffer, sizeof(buffer), 0);
+		printf("%s\n", buffer);
+		printf("%s\n", "Server:");
+		scanf("%s", buffer);
+		send(clientfd, buffer, sizeof(buffer), 0);
+		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
+		// scanf("%d", &cont);
+
+	}
 	close(clientfd);
-}
 }
 return 0;
 }

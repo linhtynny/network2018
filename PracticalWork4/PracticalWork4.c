@@ -13,6 +13,7 @@ struct hostent *h;
 int sockfd;
 unsigned short port = 8784;
 char str[80], buffer[100];
+int cont = 1;
 
 if ((sockfd=socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("Error creating socket\n");
@@ -37,8 +38,17 @@ if (connect(sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
         printf("Cannot connect\n");
 }
 else{
-	printf("Connect!\n");
-	read(sockfd, buffer, sizeof(buffer));
-	printf("%s\n", buffer);
+	printf("Connect!\n");// read(sockfd, buffer, sizeof(buffer));
+	while(cont == 1){
+		
+		printf("%s\n", "Client:");
+		scanf("%s", buffer);
+		send(sockfd, buffer, sizeof(buffer), 0);
+		recv(sockfd, buffer, sizeof(buffer), 0);
+		printf("%s\n", buffer);
+		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
+		// scanf("%d", cont);
+	}
+	close(sockfd);
 }
 }
