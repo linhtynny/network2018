@@ -56,6 +56,7 @@ else{
 		printf("%s\n", "Server:");
 		// scanf("%s", buffer);
 		// free(buffer);
+		memset(buffer,0,sizeof(buffer));
 		int i = 0;
 		while (1) {
 		    scanf("%c", &buffer[i]);
@@ -67,7 +68,7 @@ else{
 		    }
 		  }
 		send(clientfd, buffer, sizeof(buffer), 0);
-		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
+		// printf("%s\n", "Stop? Type 0 to stop or else to continue. " );
 		// scanf("%d", &cont);
 
 	}

@@ -42,6 +42,7 @@ else{
 	printf("Connect!\n");// read(sockfd, buffer, sizeof(buffer));
 	while(cont == 1){
 		// free(buffer);
+		memset(buffer,0,sizeof(buffer));
 		printf("%s\n", "Client:");
 		// scanf("%s", buffer);
 		int i = 0;
@@ -58,8 +59,8 @@ else{
 		recv(sockfd, buffer, sizeof(buffer), 0);
 		printf("%s\n", "Server:");
 		printf("%s\n", buffer);
-		// printf("%s\n", "Stop? Type 0 to stop or press enter. " );
-		// scanf("%d", cont);
+		// printf("%s\n", "Stop? Type 0 to stop or else to continue. " );
+		// scanf("%d", &cont);
 	}
 	close(sockfd);
 }
