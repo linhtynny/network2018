@@ -56,13 +56,13 @@ else{
 	printf("Connect!\n");// read(sockfd, buffer, sizeof(buffer));
 	while(1){
 
-		if(recv(sockfd, buffer, sizeof(buffer), 0)>0){
-			printf("%s\n", "Server:");
+		while(recv(sockfd, buffer, sizeof(buffer), 0)>0){
+			printf("%s ", "Server: ");
 			printf("%s\n", buffer);
 		}
 		// free(buffer);
 		memset(buffer,0,sizeof(buffer));
-		printf("%s\n", "Client:");
+		printf("%s ", "Client: ");
 		scanf("%s", buffer);
 		// int i = 0;
 		// while (1) {

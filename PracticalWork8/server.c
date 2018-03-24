@@ -62,11 +62,11 @@ while (1){
 
 
 		while(1){
-			if(recv(clientfd, buffer, sizeof(buffer), 0) >0){
-				printf("%s\n", "Client:");
+			while(recv(clientfd, buffer, sizeof(buffer), 0) >0){
+				printf("%s ", "Client: ");
 				printf("%s\n", buffer);
 			}
-			printf("%s\n", "Server:");
+			printf("%s ", "Server: ");
 			memset(buffer,0,sizeof(buffer));
 
 			// write msg to buffer
