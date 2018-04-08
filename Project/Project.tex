@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{parskip}
+
+\title{System Architectures Project}
+\author{Linh Duong}
+\date{April 2018}
+
+\begin{document}
+\maketitle
+
+\bigskip
+\section{Introduction}
+My project implements a centralize chat system, similar to Internet Relay Chat (IRC). In such system, each messages sent from a client will be passed to the centralized server and be broadcast to all connected clients. Both server and client work with multiplexed, nonblocking TCP socket. 
+
+\section{Designed system}
+\subsection{Server}
+The server listens on port 8784 for connecting clients with the hostname is the IP address of the machine. It receives messages from each client, display the messages on screen then broadcasts the messages to others. 
+
+\subsection{Client}
+Client has one separated thread for input from keyboard and a thread for networking. After connecting to server, client waits for input message from keyboard on one thread and sends it to centralized server by another thread. 
+\end{document}

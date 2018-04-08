@@ -10,33 +10,29 @@
 #include <sys/select.h>
 #include <pthread.h>
 
-
 #define MAX_CLIENT 100
 
-int clientfds[100]; // list of connected clients, >0 if valid
-int sockfd, clen, clientfd;
-char buffer[100];
 
-void *input(){
-	while(1){
-		printf("%s ", "Server: ");
-		scanf("%s", buffer);
-		for(int i=0; i<MAX_CLIENT; i++) {
-			if (clientfds[i] > 0){
-				send(clientfds[i], buffer, sizeof(buffer), 0);
-			}
-		}
-	}
-}
+
+// void *input(){
+// 	while(1){
+// 		printf("%s ", "Server: ");
+// 		scanf("%s", buffer);
+// 		for(int i=0; i<MAX_CLIENT; i++) {
+// 			if (clientfds[i] > 0){
+// 				send(clientfds[i], buffer, sizeof(buffer), 0);
+// 			}
+// 		}
+// 	}
+// }
 
 int main(){
+	int clientfds[100]; // list of connected clients, >0 if valid
 
-	
+	int sockfd, clen, clientfd;
+	char buffer[100], sendbuffer[100];
 	struct sockaddr_in saddr, caddr;
-	unsigned short port = 8785;
-	
-
-	
+	unsigned short port = 8784;
 
 	if ((sockfd=socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		printf("Error creating socket \n");
@@ -44,7 +40,6 @@ int main(){
 	else{
 		printf("Socket!\n");
 	}
-
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
 
 	int fl = fcntl(sockfd, F_GETFL, 0);
@@ -55,7 +50,6 @@ int main(){
 	saddr.sin_family = AF_INET; 
 	saddr.sin_addr.s_addr = htonl(INADDR_ANY); 
 	saddr.sin_port = htons(port);
-
 
 
 	if ((bind(sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0)) { 
@@ -71,10 +65,8 @@ int main(){
 	else{
 		printf("Listen!\n");
 	}
-
-	pthread_t inputthread;
-	pthread_create(&inputthread, NULL,input, NULL);
-
+	// pthread_t inputthread;
+	// pthread_create(&inputthread, NULL,input, NULL);
 
 	clen=sizeof(caddr);
 	// clientfd = accept(sockfd, (struct sockaddr *)&caddr, (socklen_t *)&clen);
@@ -88,6 +80,7 @@ int main(){
 		FD_ZERO(&set); //clear the set
 		FD_SET(sockfd, &set);
 		int maxfd = sockfd;
+
 		for (int i = 0; i < 100; i++) { // add connected client sockets to set
 			if (clientfds[i] > 0) FD_SET(clientfds[i], &set);
 			if (clientfds[i] > maxfd) maxfd = clientfds[i]; 
@@ -97,9 +90,11 @@ int main(){
 
 		// a «listening» socket?
 		if (FD_ISSET(sockfd, &set)) {
-		clientfd = accept(sockfd, (struct sockaddr *) &saddr, (socklen_t *)&clen);
+			if ((clientfd = accept(sockfd, (struct sockaddr *)&caddr, (socklen_t *)&clen)) > 0){
+				printf("Accept!\n");
+			}
 		    // make it nonblocking
-		    fl = fcntl(clientfd, F_GETFL, 0);
+		    int fl = fcntl(clientfd, F_GETFL, 0);
 		    fl |= O_NONBLOCK;
 		    fcntl(clientfd, F_SETFL, fl);
 		    // add it to the clientfds array
@@ -117,13 +112,23 @@ int main(){
 		for (int i = 0; i < MAX_CLIENT; i++) {
 			if (clientfds[i] > 0 && FD_ISSET(clientfds[i], &set)) {
 				if (read(clientfds[i], buffer, sizeof(buffer)) > 0) {
-					printf("client %d says: %s\nserver>", clientfds[i], buffer);
+					// printf("client %d says: %s\nserver>", clientfds[i], buffer);
+					snprintf(sendbuffer, sizeof(sendbuffer), "Client %d: %s", clientfds[i], buffer);
+					printf("%s\n", sendbuffer);
+					for (int j = 0; j < MAX_CLIENT; j++)
+                    {
+                        if (clientfds[j] > 0 && clientfds[j] != clientfds[i]) // send to different clients
+                        {
+                            send(clientfds[j], sendbuffer, sizeof(sendbuffer), 0);
+                        }
+                    }
 				}
 				else {
 			            // some error. remove it from the "active" fd array
 			            printf("client %d has disconnected.\n", clientfds[i]);
 			            clientfds[i] = 0;
 			    }
+			    memset(&buffer, 0, sizeof(buffer));
 			} 
 		}
 
