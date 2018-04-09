@@ -17,14 +17,18 @@ pthread_mutex_t sleepmutex = PTHREAD_MUTEX_INITIALIZER;
 
 char buffer[100],sendbuffer[100];
 int sockfd;
+int p[2];
 
 void *input()
 {
    while(1){
-        pthread_mutex_lock(&mutex);
         printf("Client: ");
+        pthread_mutex_lock(&mutex);
+        // printf("Client: ");
         scanf("%s", buffer);
-
+        dup2(p[1],1);
+        // close(p[1]);
+        // close(p[0]);
         // for(int i=0; i<MAX_CLIENT; i++) {
         //  if (clientfds[i] > 0){
         //      send(clientfds[i], buffer, sizeof(buffer), 0);
@@ -39,6 +43,9 @@ void *network(void *sockfd)
     int tempfd = *((int *)sockfd);
     while (1){
         pthread_mutex_lock(&mutex);
+        dup2(p[0],0);
+        // close(p[0]);
+        // close(p[1]);
         send(tempfd, buffer, sizeof(buffer), 0);
         memset(&buffer, 0, sizeof(buffer));
         pthread_mutex_unlock(&mutex);
@@ -47,10 +54,9 @@ void *network(void *sockfd)
 
 int main(int argc, char **argv)
 {
-    struct sockaddr_in saddr;
+struct sockaddr_in saddr;
 struct hostent *h;
 struct in_addr **ip ;
-
 unsigned short port = 8784;
 char host[100];
 
@@ -91,21 +97,20 @@ else{
         printf("Connect!\n");
 //  }
 // }
-// if (connect(sockfd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) {
-//         printf("Cannot connect, error is %d\n", errno);
-// }
-// else{
-//  int fl = fcntl(sockfd, F_GETFL, 0);
-//        fl |= O_NONBLOCK;
-//        fcntl(sockfd, F_SETFL, fl);
-
-//  printf("Connect!\n");// read(sockfd, buffer, sizeof(buffer));
-
+// read(sockfd, buffer, sizeof(buffer));
+           
             pthread_t th_input, th_network;
+            // printf("Client: ");
+            pipe(p);
             pthread_create(&th_input, NULL,input, NULL);
+            close(p[1]);
+            close(p[0]);
             pthread_create(&th_network, NULL, network, &sockfd);
+            close(p[1]);
+            close(p[0]);
             while (1)
             {
+                // pipe(p);
                 while (recv(sockfd, sendbuffer, sizeof(sendbuffer), 0) > 0)
                 {
                     printf("%s\n", sendbuffer);
