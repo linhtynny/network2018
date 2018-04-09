@@ -100,11 +100,10 @@ int main(){
 		    // add it to the clientfds array
 			for (int i = 0; i < MAX_CLIENT; i++) { 
 				if (clientfds[i] == 0) {
-					if (clientfds[i] == 0) {
-						clientfds[i] = clientfd;
-						break; 
-					}
+					clientfds[i] = clientfd;
+					break; 
 				}
+				
 			}
 		}
 
