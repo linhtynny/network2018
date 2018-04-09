@@ -26,7 +26,7 @@ void *input()
         pthread_mutex_lock(&mutex);
         // printf("Client: ");
         scanf("%s", buffer);
-        dup2(p[1],1);
+        // dup2(p[1],1);
         // close(p[1]);
         // close(p[0]);
         // for(int i=0; i<MAX_CLIENT; i++) {
@@ -43,7 +43,7 @@ void *network(void *sockfd)
     int tempfd = *((int *)sockfd);
     while (1){
         pthread_mutex_lock(&mutex);
-        dup2(p[0],0);
+        // dup2(p[0],0);
         // close(p[0]);
         // close(p[1]);
         send(tempfd, buffer, sizeof(buffer), 0);
@@ -101,13 +101,13 @@ else{
            
             pthread_t th_input, th_network;
             // printf("Client: ");
-            pipe(p);
+            // pipe(p);
             pthread_create(&th_input, NULL,input, NULL);
-            close(p[1]);
-            close(p[0]);
+            // close(p[1]);
+            // close(p[0]);
             pthread_create(&th_network, NULL, network, &sockfd);
-            close(p[1]);
-            close(p[0]);
+            // close(p[1]);
+            // close(p[0]);
             while (1)
             {
                 // pipe(p);
